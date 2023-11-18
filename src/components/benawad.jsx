@@ -1,7 +1,6 @@
 import React from 'react'
 import { SEARCH_ICON } from '../assets/icons/icons'
 import { Link } from 'react-router-dom'
-// import MyComponent from '../components/MyComponent'
 
 const Benawad = () => {
 
