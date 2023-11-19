@@ -11,10 +11,15 @@ import Benawad from '../components/benawad'
 
 const Entirepages = () => {
     const [trendingRepos, setTrendingRepos] = useState([]);
+    const fetchRepos = async() => {
+        try{
+            const res = await 
+        }
+    }
 
     useEffect(() => {
         axios.get("https://api.github.com/search/repositories?q=created:>2021-01-01&sort=stars&order=desc")
-            .then((res) => {
+            .try((res) => {
                 setTrendingRepos(res.data.items);
             })
             .catch((error) => {
