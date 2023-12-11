@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { fetchData } from '../API/Api'
 import ApiKey from '../services/axios'
 
-const ViewCommit = (props) => {
+const ViewCommit = () => {
     const [commits, setCommits] = useState([])
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState('')
