@@ -1,8 +1,42 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { CIRCLE_ICON, SEARCH_ICON } from '../assets/icons/icons'
 import { Link } from 'react-router-dom'
+import { fetchData } from '../API/Api'
+import ApiKey from '../services/axios'
 
-const ViewCommit = () => {
+const ViewCommit = (props) => {
+    const [commits, setCommits] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [data, setData] = useState('')
+
+    const locate = useLocation()
+
+    useEffect(() => {
+        setData(locate.state.data)
+    }, [])
+
+
+    const fetchApi = async () => {
+        setLoading(true)
+        try {
+            const response = await ApiKey.get(`https://api.github.com/search/commits?q=/${data.full_name}`)
+            setCommits(response.data.items)
+            console.log(response.data)
+        }
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
+
+    useEffect(() => {
+        fetchApi();
+    }, [])
+
     return (
         <div>
             <div>
@@ -22,7 +56,7 @@ const ViewCommit = () => {
                         </Link>
                     </button>
                 </div>
-                <h1 className='text-dark text-[36px] font-[600] leading-[44px] tracking-[-1.5px] max-w-[286px] w-[100%] mx-[auto] text-center '>
+                <h1 className='text-dark text-[36px] font-[600] leading-[44px] tracking-[-1.5px] max-w-[286px] w-[100%] mx-[auto] text-center'>
                     microsoft/vscode
                 </h1>
 
@@ -31,55 +65,12 @@ const ViewCommit = () => {
                     <div className='flex items-align gap-[100px] mt-[16px] '>
                         <div className="flex gap-[16px] items-center">
                             <CIRCLE_ICON />
-                            <p className='text-[20px] font-[600] leading-[30px] tracking-[-0.55px]'>gaearon</p>
+                            <p className='text-[20px] font-[600] leading-[30px] tracking-[-0.55px]'>{commits?.commit?.author?.name} </p>
                         </div>
                         <p className=' text-[20px] align-right text-[#18214D] font-[400] leading-[28px] tracking-[-0.4px]'>23:30 28/04/2021</p>
                     </div>
                 </div>
 
-                <div className='flex flex-col max-w-[396px] w-[100%] mx-[auto] px-[3px] items-center justify-center my-[32px]'>
-                    <p className='text-dark text-[20px] font-[400] leading-[28px] tracking-[-0.4px]'>Log all errors to console.error by default (#21130)</p>
-                    <div className='flex items-align gap-[100px] mt-[16px] '>
-                        <div className="flex gap-[16px] items-center">
-                            <CIRCLE_ICON />
-                            <p className='text-[20px] font-[600] leading-[30px] tracking-[-0.55px]'>gaearon</p>
-                        </div>
-                        <p className=' text-[20px] align-right text-[#18214D] font-[400] leading-[28px] tracking-[-0.4px]'>23:30 28/04/2021</p>
-                    </div>
-                </div>
-
-                <div className='flex flex-col max-w-[396px] w-[100%] mx-[auto] px-[3px] items-center justify-center my-[32px]'>
-                    <p className='text-dark text-[20px] font-[400] leading-[28px] tracking-[-0.4px]'>Log all errors to console.error by default (#21130)</p>
-                    <div className='flex items-align gap-[100px] mt-[16px] '>
-                        <div className="flex gap-[16px] items-center">
-                            <CIRCLE_ICON />
-                            <p className='text-[20px] font-[600] leading-[30px] tracking-[-0.55px]'>gaearon</p>
-                        </div>
-                        <p className=' text-[20px] align-right text-[#18214D] font-[400] leading-[28px] tracking-[-0.4px]'>23:30 28/04/2021</p>
-                    </div>
-                </div>
-
-                <div className='flex flex-col max-w-[396px] w-[100%] mx-[auto] px-[3px] items-center justify-center my-[32px]'>
-                    <p className='text-dark text-[20px] font-[400] leading-[28px] tracking-[-0.4px]'>Log all errors to console.error by default (#21130)</p>
-                    <div className='flex items-align gap-[100px] mt-[16px] '>
-                        <div className="flex gap-[16px] items-center">
-                            <CIRCLE_ICON />
-                            <p className='text-[20px] font-[600] leading-[30px] tracking-[-0.55px]'>gaearon</p>
-                        </div>
-                        <p className=' text-[20px] align-right text-[#18214D] font-[400] leading-[28px] tracking-[-0.4px]'>23:30 28/04/2021</p>
-                    </div>
-                </div>
-
-                <div className='flex flex-col max-w-[396px] w-[100%] mx-[auto] px-[3px] items-center justify-center my-[32px]'>
-                    <p className='text-dark text-[20px] font-[400] leading-[28px] tracking-[-0.4px]'>Log all errors to console.error by default (#21130)</p>
-                    <div className='flex items-align gap-[100px] mt-[16px] '>
-                        <div className="flex gap-[16px] items-center">
-                            <CIRCLE_ICON />
-                            <p className='text-[20px] font-[600] leading-[30px] tracking-[-0.55px]'>gaearon</p>
-                        </div>
-                        <p className=' text-[20px] align-right text-[#18214D] font-[400] leading-[28px] tracking-[-0.4px]'>23:30 28/04/2021</p>
-                    </div>
-                </div>
             </div>
         </div>
     )
