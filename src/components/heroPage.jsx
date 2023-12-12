@@ -12,13 +12,13 @@ import ViewCommit from './viewCommit'
 const Home = () => {
     const [data, setData] = useState([]);
     const [users, setUsers] = useState([]);
+    const [searchedRepo, setSearchedRepo] = useState(' ');
 
     const fetchData = async () => {
         try {
             const response = await ApiKey.get('/repositories',
                 {
                     params: {
-                        // q: 'followers',
                         sort: 'followers',
                         order: 'asc',
                         per_pages: 4,
@@ -35,7 +35,7 @@ const Home = () => {
 
     const handleInput = (e) => {
         const value = e.target.value;
-        setData(value)
+        setSearchedRepo(value)
     }
 
     // const handleSearch = async (input) => {
@@ -59,7 +59,25 @@ const Home = () => {
 
     const navigate = useNavigate();
 
-    const handleClick = () => { navigate('/ViewCommit') }
+    // const handleClick = () => { navigate('/ViewCommit') }
+
+    const handleClick = async () => {
+        if (!searchedRepo) return;
+
+        try {
+            const response = await ApiKey.get(`/repos/${searchedRepo}/commits`);
+            const commits = response.data;
+
+            // Store commits in a state variable
+            setCommits(commits);
+
+            // Navigate to ViewCommit page with commits as parameter
+            navigate('/ViewCommit', { state: { commits } });
+        } catch (error) {
+            console.error('Error fetching commits: ', error);
+        }
+    };
+
 
 
     return (
@@ -90,7 +108,7 @@ const Home = () => {
                     </div>
 
 
-                    <button className='max-w-[24.75rem] w-[100%] mx-[auto] mb-[2rem] block pt-[1.09rem] pb-[0.79rem] bg-secondary rounded-[0.5rem] font-inter text-[1.25rem] font-600 leading-[1.75rem] tracking-[-0.03125rem] text-white text-center xl:max-w-[210px] xl:w-[100%] xl:ml-[0]' >
+                    <button onClick={handleClick} className='max-w-[24.75rem] w-[100%] mx-[auto] mb-[2rem] block pt-[1.09rem] pb-[0.79rem] bg-secondary rounded-[0.5rem] font-inter text-[1.25rem] font-600 leading-[1.75rem] tracking-[-0.03125rem] text-white text-center xl:max-w-[210px] xl:w-[100%] xl:ml-[0]' >
                         <Link to="/ViewCommit">
                             See commits 🚀
                         </Link>
